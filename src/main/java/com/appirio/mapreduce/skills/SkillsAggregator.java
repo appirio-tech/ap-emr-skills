@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 
@@ -48,7 +49,7 @@ public class SkillsAggregator {
         MultipleInputs.addInputPath(job, new Path(remainingArgs[1]),
                 TextInputFormat.class, ChallengeSkillsMapper.class);
 
-        FileOutputFormat.setOutputPath(job, new Path(remainingArgs[2]));
+        TextOutputFormat.setOutputPath(job, new Path(remainingArgs[2]));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);
     }

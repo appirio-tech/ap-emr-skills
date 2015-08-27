@@ -1,6 +1,6 @@
 .classpath
 .project
-./dependency-reduced-pom.xml
+dependency-reduced-pom.xml
 target/*
 .idea/*
 .DS_Store
