@@ -34,17 +34,17 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
 
         while(itr.hasNext()) {
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
-            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
-//            long tagId = skill.getTagId();
-//            skillMap.put(tagId, skillMap.containsKey(tagId) ? skillMap.get(tagId)+skill.getWeight() : skill.getWeight());
+//            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
+            long tagId = skill.getTagId();
+            skillMap.put(tagId, skillMap.containsKey(tagId) ? skillMap.get(tagId)+skill.getWeight() : skill.getWeight());
         }
 
         // Create output object
         List<AggregatedSkill> aggregatedSkills = new ArrayList<AggregatedSkill>();
-//        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
-        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
-            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
-        }
+        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
+//        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
+//            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
+//        }
 
         // tokenize key
         String inKey[] = key.toString().split(":", 2);
