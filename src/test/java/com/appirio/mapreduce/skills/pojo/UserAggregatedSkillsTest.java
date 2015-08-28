@@ -34,7 +34,7 @@ public class UserAggregatedSkillsTest {
     public void testCreate() {
         UserAggregatedSkills uas = new UserAggregatedSkills();
         uas.setUserId(new Long("1"));
-        List<AggregatedSkill> skills = new ArrayList<>();
+        List<AggregatedSkill> skills = new ArrayList<AggregatedSkill>();
         skills.add(new AggregatedSkill(1L, 89.00));
         skills.add(new AggregatedSkill(1L, 89.00));
 

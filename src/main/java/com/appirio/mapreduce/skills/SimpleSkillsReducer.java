@@ -30,16 +30,21 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
     protected void reduce(Text key, Iterable<Text> skills, Context context)
         throws IOException, InterruptedException {
         Iterator<Text> itr = skills.iterator();
-        HashMap<Long, Double> skillMap = new HashMap<>();
+        HashMap<Long, Double> skillMap = new HashMap<Long, Double>();
 
         while(itr.hasNext()) {
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
-            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
+//            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
+            long tagId = skill.getTagId();
+            skillMap.put(tagId, skillMap.getOrDefault(tagId, new Double("0")) + skill.getWeight());
         }
 
         // Create output object
-        List<AggregatedSkill> aggregatedSkills = new ArrayList<>();
-        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
+        List<AggregatedSkill> aggregatedSkills = new ArrayList<AggregatedSkill>();
+//        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
+        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
+            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
+        }
 
         // tokenize key
         String inKey[] = key.toString().split(":", 2);
