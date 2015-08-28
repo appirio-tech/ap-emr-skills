@@ -41,10 +41,10 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
 
         // Create output object
         List<AggregatedSkill> aggregatedSkills = new ArrayList<AggregatedSkill>();
-        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
-//        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
-//            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
-//        }
+//        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
+        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
+            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
+        }
 
         // tokenize key
         String inKey[] = key.toString().split(":", 2);
