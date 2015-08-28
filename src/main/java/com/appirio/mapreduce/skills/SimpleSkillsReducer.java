@@ -36,7 +36,7 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
 //            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
             long tagId = skill.getTagId();
-            skillMap.put(tagId, skillMap.getOrDefault(tagId, new Double("0")) + skill.getWeight());
+            skillMap.put(tagId, skillMap.containsKey(tagId) ? skillMap.get(tagId)+skill.getWeight() : skill.getWeight());
         }
 
         // Create output object
