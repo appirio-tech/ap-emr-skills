@@ -6,7 +6,6 @@ package com.appirio.mapreduce.skills;
 public class TagHelperFactory {
 
     public static TagHelper getHelper() {
-        System.out.println("in helper factory");
         return new TagHelperImpl();
     }
 }

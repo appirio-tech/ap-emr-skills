@@ -4,18 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by parthshah on 8/24/15.
  */
 public class AggregatedSkill {
-
-    @JsonProperty
-    @Getter
-    @Setter
-    private long tagId;
 
     @JsonProperty
     @Getter
@@ -29,8 +23,7 @@ public class AggregatedSkill {
 
     public AggregatedSkill() {}
 
-    public AggregatedSkill(long tagId, double score, Set<SkillSource> sources) {
-        this.tagId = tagId;
+    public AggregatedSkill(double score, Set<SkillSource> sources) {
         this.score = score;
         this.sources = sources;
     }

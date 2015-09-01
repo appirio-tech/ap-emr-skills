@@ -2,7 +2,6 @@ package com.appirio.mapreduce.skills.mappers;
 
 import com.appirio.mapreduce.skills.TagHelper;
 import com.appirio.mapreduce.skills.TagHelperFactory;
-import com.appirio.mapreduce.skills.TagHelperImpl;
 import com.appirio.mapreduce.skills.pojo.MappedSkill;
 import com.appirio.mapreduce.skills.pojo.SkillSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,11 +20,11 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 
 /**
@@ -72,26 +71,26 @@ public class ChallengeSkillsMapperTest {
         skill1.setHidden(false);
         skill1.setWeight(1);
         skill1.setTagId(1L);
-        skill1.setSource(SkillSource.CHALLENGE);
+        skill1.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
 
         MappedSkill skill2 = new MappedSkill();
         skill2.setHidden(false);
         skill2.setWeight(1);
         skill2.setTagId(2L);
-        skill2.setSource(SkillSource.CHALLENGE);
+        skill2.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
 
         MappedSkill skill3 = new MappedSkill();
         skill3.setHidden(false);
         skill3.setWeight(1);
         skill3.setTagId(2L);
-        skill3.setSource(SkillSource.CHALLENGE);
+        skill3.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
 
         // ghostar
         MappedSkill skill4 = new MappedSkill();
         skill4.setHidden(false);
         skill4.setWeight(1);
         skill4.setTagId(1L);
-        skill4.setSource(SkillSource.CHALLENGE);
+        skill4.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
 
         List<Pair<Text, Text>> output = new ArrayList<Pair<Text, Text>>();
 

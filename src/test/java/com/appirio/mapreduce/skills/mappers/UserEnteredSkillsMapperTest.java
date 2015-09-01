@@ -12,6 +12,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -37,13 +39,13 @@ public class UserEnteredSkillsMapperTest {
         skill1.setHidden(false);
         skill1.setWeight(1);
         skill1.setTagId(1L);
-        skill1.setSource(SkillSource.USER_ENTERED);
+        skill1.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.USER_ENTERED)));
 
         MappedSkill skill2 = new MappedSkill();
         skill2.setHidden(false);
         skill2.setWeight(1);
         skill2.setTagId(2L);
-        skill2.setSource(SkillSource.USER_ENTERED);
+        skill2.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.USER_ENTERED)));
         List<Pair<Text, Text>> output = new ArrayList<Pair<Text, Text>>();
         final Text outKey = new Text("1:albertwang");
         ObjectMapper objMapper = new ObjectMapper();
