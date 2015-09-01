@@ -16,6 +16,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.util.Map;
 
 
 public class UserEnteredSkillsMapper extends Mapper<LongWritable, Text, Text, Text> {
@@ -40,17 +41,22 @@ public class UserEnteredSkillsMapper extends Mapper<LongWritable, Text, Text, Te
         String outKeyStr = skillRec.getUserId() + ":" + skillRec.getUserHandle();
         Text outKey = new Text(outKeyStr);
 
-        // map
-        for (UserEnteredSkill s : skillRec.getSkills()) {
-            if (!s.isHidden()) {
-                MappedSkill skill = new MappedSkill();
-                skill.setTagId(s.getTagId());
-                // defaulting the weight to 1
-                skill.setWeight(defaultUserSkillWeight);
-                skill.setSource(SkillSource.USER_ENTERED);
-                Text val = new Text(mapper.writeValueAsBytes(skill));
-                context.write(outKey, val);
-            }
+        Map<Long, UserEnteredSkill> skillsMap = mapper.readValue(
+                skillRec.getSkills(),
+                mapper.getTypeFactory().constructMapType(Map.class, Long.class, UserEnteredSkill.class));
+
+        // re-using the same skill object since we are adding values as Text by converting to string
+        log.error("MapSize: " + skillsMap.size());
+        for (Map.Entry<Long, UserEnteredSkill> entry: skillsMap.entrySet()) {
+            log.error("Entry: "+ entry.getKey());
+            MappedSkill skill = new MappedSkill();
+            skill.setSource(SkillSource.USER_ENTERED);
+            // defaulting the weight to 1
+            skill.setWeight(defaultUserSkillWeight);
+            skill.setTagId(entry.getKey());
+            skill.setHidden(entry.getValue().isHidden());
+            Text val = new Text(mapper.writeValueAsBytes(skill));
+            context.write(outKey, val);
         }
     }
 

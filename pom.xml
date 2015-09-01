@@ -39,12 +39,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20141113</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.2</version>
@@ -68,19 +62,39 @@
             <version>2.5.1</version>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>junit</groupId>-->
+            <!--<artifactId>junit</artifactId>-->
+            <!--<version>4.12</version>-->
+            <!--<scope>test</scope>-->
+        <!--</dependency>-->
+
         <dependency>
-            <groupId>org.powermock</groupId>
-            <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
+            <groupId>org.apache.mrunit</groupId>
+            <artifactId>mrunit</artifactId>
+            <version>1.1.0</version>
+            <classifier>hadoop2</classifier>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.powermock</groupId>
-            <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
-            <scope>test</scope>
+            <artifactId>powermock-core</artifactId>
+            <version>1.5.4</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+
     </dependencies>
 
     <build>

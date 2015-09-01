@@ -2,8 +2,10 @@ package com.appirio.mapreduce.skills;
 
 import com.appirio.mapreduce.skills.pojo.AggregatedSkill;
 import com.appirio.mapreduce.skills.pojo.MappedSkill;
+import com.appirio.mapreduce.skills.pojo.SkillSource;
 import com.appirio.mapreduce.skills.pojo.UserAggregatedSkills;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.io.NullWritable;
@@ -17,6 +19,12 @@ import java.util.*;
  * Created by parthshah on 8/23/15.
  */
 public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable> {
+
+
+    private class SkillTuple {
+        private  Set<SkillSource> sources;
+        private double weight;
+    }
     public final static ObjectMapper mapper = new ObjectMapper();
 
     protected static Log log;
@@ -30,24 +38,39 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
     protected void reduce(Text key, Iterable<Text> skills, Context context)
         throws IOException, InterruptedException {
         Iterator<Text> itr = skills.iterator();
-        HashMap<Long, Double> skillMap = new HashMap<Long, Double>();
+        HashMap<Long, SkillTuple> skillMap = new HashMap<Long, SkillTuple>();
 
         while(itr.hasNext()) {
+
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
 //            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
             long tagId = skill.getTagId();
-            skillMap.put(tagId, skillMap.containsKey(tagId) ? skillMap.get(tagId)+skill.getWeight() : skill.getWeight());
+            SkillTuple tup;
+            if (skillMap.containsKey(tagId)) {
+                // if tuple exists , updated weight & sources set
+                tup = skillMap.get(tagId);
+                tup.weight += skill.getWeight();
+                tup.sources.add(skill.getSource());
+            } else {
+                // create new tuple set and add source & weight
+                tup = new SkillTuple();
+                tup.weight = skill.getWeight();
+                tup.sources = new HashSet<SkillSource>();
+                tup.sources.add(skill.getSource());
+            }
+            skillMap.put(tagId, tup);
         }
 
         // Create output object
         List<AggregatedSkill> aggregatedSkills = new ArrayList<AggregatedSkill>();
 //        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
-        for (Map.Entry<Long, Double> entry: skillMap.entrySet()) {
-            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue()));
+        for (Map.Entry<Long, SkillTuple> entry: skillMap.entrySet()) {
+            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue().weight, entry.getValue().sources));
         }
 
-        // tokenize key
+        // tokenize key - userId:userHandle
         String inKey[] = key.toString().split(":", 2);
+        // Fixme: handle this in a better way?
         assert(inKey.length == 2);
 
         UserAggregatedSkills userAgrSkills = new UserAggregatedSkills(new Long(inKey[0]), inKey[1], aggregatedSkills);

@@ -13,19 +13,18 @@ import java.util.List;
 
 
 public class UserEnteredSkillRecord {
-    @JsonProperty
+    @JsonProperty("userid")
     @Getter
     @Setter
     private long userId;
 
-    @JsonProperty
+    @JsonProperty("userhandle")
     @Getter
     @Setter
     private String userHandle;
 
-    @JsonBackReference
+    @JsonBackReference("skills")
     @Getter
     @Setter
-    private List<UserEnteredSkill> skills;
-
+    private String skills;
 }

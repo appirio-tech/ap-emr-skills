@@ -24,4 +24,8 @@ public class MappedSkill {
     @Setter
     private double weight;
 
+    @JsonProperty
+    @Getter
+    @Setter
+    private boolean hidden;
 }

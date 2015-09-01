@@ -12,10 +12,10 @@ import java.util.Date;
  */
 public class UserEnteredSkill {
 
-    @JsonProperty
-    @Getter
-    @Setter
-    private long tagId;
+//    @JsonProperty
+//    @Getter
+//    @Setter
+//    private long tagId;
 
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss'Z'", timezone="UTC")
     @Getter
