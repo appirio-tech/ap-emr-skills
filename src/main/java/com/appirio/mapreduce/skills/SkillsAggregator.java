@@ -4,53 +4,96 @@ package com.appirio.mapreduce.skills;
  * Created by parthshah on 8/23/15.
  */
 
+import com.appirio.mapreduce.skills.combiners.SkillsCombiner;
 import com.appirio.mapreduce.skills.mappers.ChallengeSkillsMapper;
 import com.appirio.mapreduce.skills.mappers.UserEnteredSkillsMapper;
+import com.appirio.mapreduce.skills.reducers.SimpleSkillsReducer;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.MultipleInputs;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
-import org.apache.hadoop.util.GenericOptionsParser;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+
+import java.net.URI;
 
 
-public class SkillsAggregator {
+public class SkillsAggregator extends Configured implements Tool {
 
-    public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
-        GenericOptionsParser optionParser = new GenericOptionsParser(conf, args);
-        String[] remainingArgs = optionParser.getRemainingArgs();
-        if (remainingArgs.length != 3){
-            System.err.println("Usage: skillsAggregator <in1> <in2> <out>");
-            System.exit(2);
+    // input URIs
+    private String userEnteredSkillsURI;
+    private String challengeSkillsURI;
+
+    private String tagsFileURI;
+
+    // output URI
+    private String outputURI;
+
+    private int initArgs(String[] args) {
+        if (args.length != 4) {
+            System.err.printf("Usage: %s <tagsMap> <userEnteredSkills> <challengeSkills> <output> \n", getClass().getSimpleName());
+            ToolRunner.printGenericCommandUsage(System.err);
+            return -1;
         }
-        Job job = Job.getInstance(conf, "skill aggregator");
-        job.setJarByClass(SkillsAggregator.class);
+        tagsFileURI = args[0];
+        userEnteredSkillsURI = args[1];
+        challengeSkillsURI = args[2];
+        outputURI = args[3];
+        System.out.println("TagFilesURI: " + tagsFileURI);
+        System.out.println("userEnteredSkillsURI: " + userEnteredSkillsURI);
+        System.out.println("challengeSkillsURI: " + challengeSkillsURI);
+        System.out.println("outputURI: " + outputURI);
 
+        return 0;
+    }
+
+    public int run(String[] args) throws Exception {
+
+        // init
+        int initRet = this.initArgs(args);
+        if (initRet != 0) {
+            return initRet;
+        }
+
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf);
+        job.setJarByClass(com.appirio.mapreduce.skills.SkillsAggregator.class);
 
         // mappers
-        job.setMapperClass(UserEnteredSkillsMapper.class);
+        // user entered skills
+        MultipleInputs.addInputPath(job, new Path(userEnteredSkillsURI),
+                TextInputFormat.class, UserEnteredSkillsMapper.class);
+        // challenge skills
+        MultipleInputs.addInputPath(job, new Path(challengeSkillsURI),
+                TextInputFormat.class, ChallengeSkillsMapper.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
+
+        // Tag file - cache
+        job.addCacheFile(new URI(tagsFileURI));
+
+        // combiner
+        job.setCombinerClass(SkillsCombiner.class);
 
         // reducers
         job.setReducerClass(SimpleSkillsReducer.class);
 
         // output format
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(Text.class);
+//        job.setOutputValueClass(NullWritable.class);
 
-        MultipleInputs.addInputPath(job, new Path(remainingArgs[0]),
-                TextInputFormat.class, UserEnteredSkillsMapper.class);
+        // set output
+        TextOutputFormat.setOutputPath(job, new Path(outputURI));
 
-        MultipleInputs.addInputPath(job, new Path(remainingArgs[1]),
-                TextInputFormat.class, ChallengeSkillsMapper.class);
+        return job.waitForCompletion(true) ? 0 :1;
+    }
 
-        TextOutputFormat.setOutputPath(job, new Path(remainingArgs[2]));
-
-        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    public static void main(String[] argv)throws Exception{
+        int exitCode = ToolRunner.run(new SkillsAggregator(), argv);
+        System.exit(exitCode);
     }
 }

@@ -1,11 +1,10 @@
-package com.appirio.mapreduce.skills;
+package com.appirio.mapreduce.skills.reducers;
 
 import com.appirio.mapreduce.skills.pojo.AggregatedSkill;
 import com.appirio.mapreduce.skills.pojo.MappedSkill;
 import com.appirio.mapreduce.skills.pojo.SkillSource;
 import com.appirio.mapreduce.skills.pojo.UserAggregatedSkills;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.io.NullWritable;
@@ -50,22 +49,22 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
                 // if tuple exists , updated weight & sources set
                 tup = skillMap.get(tagId);
                 tup.weight += skill.getWeight();
-                tup.sources.add(skill.getSource());
+                tup.sources.addAll(skill.getSources());
             } else {
                 // create new tuple set and add source & weight
                 tup = new SkillTuple();
                 tup.weight = skill.getWeight();
                 tup.sources = new HashSet<SkillSource>();
-                tup.sources.add(skill.getSource());
+                tup.sources.addAll(skill.getSources());
             }
             skillMap.put(tagId, tup);
         }
 
         // Create output object
-        List<AggregatedSkill> aggregatedSkills = new ArrayList<AggregatedSkill>();
+        Map<Long, AggregatedSkill> aggregatedSkills = new HashMap<Long, AggregatedSkill>();
 //        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
         for (Map.Entry<Long, SkillTuple> entry: skillMap.entrySet()) {
-            aggregatedSkills.add(new AggregatedSkill(entry.getKey(), entry.getValue().weight, entry.getValue().sources));
+            aggregatedSkills.put(entry.getKey(), new AggregatedSkill(entry.getValue().weight, entry.getValue().sources));
         }
 
         // tokenize key - userId:userHandle
@@ -73,9 +72,12 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
         // Fixme: handle this in a better way?
         assert(inKey.length == 2);
 
-        UserAggregatedSkills userAgrSkills = new UserAggregatedSkills(new Long(inKey[0]), inKey[1], aggregatedSkills);
+        UserAggregatedSkills userAgrSkills = new UserAggregatedSkills(
+                new Long(inKey[0]),
+                inKey[1],
+                mapper.writeValueAsString(aggregatedSkills)
+        );
         String output = mapper.writeValueAsString(userAgrSkills);
-        log.error(output);
         context.write(new Text(output), NullWritable.get());
     }
 }

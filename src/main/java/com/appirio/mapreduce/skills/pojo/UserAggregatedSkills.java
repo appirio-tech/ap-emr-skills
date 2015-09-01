@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 /**
  * Created by parthshah on 8/24/15.
  */
@@ -23,12 +21,12 @@ public class UserAggregatedSkills {
 
     @Getter
     @Setter
-    private List<AggregatedSkill> skills;
+    private String skills;
 
 
     public UserAggregatedSkills() {}
 
-    public UserAggregatedSkills(long userId, String handle, List<AggregatedSkill> skills) {
+    public UserAggregatedSkills(long userId, String handle, String skills) {
         this.userId = userId;
         this.userHandle = handle;
         this.skills = skills;

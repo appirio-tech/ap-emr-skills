@@ -16,6 +16,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
 
 
@@ -50,7 +52,7 @@ public class UserEnteredSkillsMapper extends Mapper<LongWritable, Text, Text, Te
         for (Map.Entry<Long, UserEnteredSkill> entry: skillsMap.entrySet()) {
             log.error("Entry: "+ entry.getKey());
             MappedSkill skill = new MappedSkill();
-            skill.setSource(SkillSource.USER_ENTERED);
+            skill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.USER_ENTERED)));
             // defaulting the weight to 1
             skill.setWeight(defaultUserSkillWeight);
             skill.setTagId(entry.getKey());

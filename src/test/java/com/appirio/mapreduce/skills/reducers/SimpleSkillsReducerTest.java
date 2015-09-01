@@ -1,25 +1,19 @@
-package com.appirio.mapreduce.skills.mappers;
+package com.appirio.mapreduce.skills.reducers;
 
-import com.appirio.mapreduce.skills.SimpleSkillsReducer;
 import com.appirio.mapreduce.skills.pojo.AggregatedSkill;
 import com.appirio.mapreduce.skills.pojo.MappedSkill;
 import com.appirio.mapreduce.skills.pojo.SkillSource;
 import com.appirio.mapreduce.skills.pojo.UserAggregatedSkills;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by parthshah on 8/30/15.
@@ -46,30 +40,29 @@ public class SimpleSkillsReducerTest {
         skill.setHidden(false);
         skill.setWeight(1);
         skill.setTagId(1L);
-        skill.setSource(SkillSource.USER_ENTERED);
+        skill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.USER_ENTERED)));
         values.add(new Text(objMapper.writeValueAsString(skill)));
 
         skill.setTagId(1L);
         skill.setWeight(2.0);
-        skill.setSource(SkillSource.CHALLENGE);
+        skill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
         values.add(new Text(objMapper.writeValueAsString(skill)));
 
         reduceDriver.withInput(inKey, values);
 
 
         AggregatedSkill skill1 = new AggregatedSkill(
-                1L,
                 3.0,
                 new HashSet<SkillSource>(Arrays.asList(
                         SkillSource.USER_ENTERED,
                         SkillSource.CHALLENGE
                 ))
         );
-        List<AggregatedSkill> skills = new ArrayList<AggregatedSkill>();
-        skills.add(skill1);
+        Map<Long, AggregatedSkill> skillsMap = new HashMap<Long, AggregatedSkill>();
+        skillsMap.put(1L, skill1);
 
         UserAggregatedSkills userSkills = new UserAggregatedSkills();
-        userSkills.setSkills(skills);
+        userSkills.setSkills(objMapper.writeValueAsString(skillsMap));
         userSkills.setUserHandle("albertwang");
         userSkills.setUserId(1L);
 
