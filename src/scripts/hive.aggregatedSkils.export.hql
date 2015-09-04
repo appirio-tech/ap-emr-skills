@@ -1,14 +1,14 @@
 add jar s3://supply-emr/scripts/json-serde-1.3-jar-with-dependencies.jar;
 
 DROP TABLE IF EXISTS hdfs_aggregated_skills;
-CREATE EXTERNAL TABLE hdfs_aggregated_skills(userId BIGINT, userHandle STRING, handleLower STRING, skills STRING)
+CREATE EXTERNAL TABLE hdfs_aggregated_skills(userId BIGINT, userHandle STRING, handleLower STRING, skills STRING, hidden)
 ROW FORMAT SERDE 'org.openx.data.jsonserde.JsonSerDe'
-LOCATION 'hdfs:///user/supply/skills/output';
+LOCATION 'hdfs:///user/supply/skills/output/aggregatedSkills';
 
 DROP TABLE IF EXISTS hive_aggregated_skills;
-CREATE EXTERNAL TABLE hive_skills(userId BIGINT, userHandle STRING, handleLower STRING, skills STRING)
+CREATE EXTERNAL TABLE hive_aggregated_skills(userId BIGINT, userHandle STRING, handleLower STRING, skills STRING)
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
-TBLPROPERTIES ("dynamodb.table.name" = "MemberAggregatedSkills1",
+TBLPROPERTIES ("dynamodb.table.name" = "MemberAggregatedSkills",
 "dynamodb.column.mapping" = "userId:userId,userHandle:userHandle,handleLower:handleLower,skills:skills");
 
 INSERT OVERWRITE TABLE hive_aggregated_skills SELECT * FROM hdfs_aggregated_skills;

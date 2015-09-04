@@ -23,6 +23,7 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
     private class SkillTuple {
         private  Set<SkillSource> sources;
         private double weight;
+        private boolean hidden;
     }
     public final static ObjectMapper mapper = new ObjectMapper();
 
@@ -56,6 +57,7 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
                 tup.weight = skill.getWeight();
                 tup.sources = new HashSet<SkillSource>();
                 tup.sources.addAll(skill.getSources());
+                tup.hidden = skill.isHidden();
             }
             skillMap.put(tagId, tup);
         }
@@ -64,7 +66,8 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
         Map<Long, AggregatedSkill> aggregatedSkills = new HashMap<Long, AggregatedSkill>();
 //        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
         for (Map.Entry<Long, SkillTuple> entry: skillMap.entrySet()) {
-            aggregatedSkills.put(entry.getKey(), new AggregatedSkill(entry.getValue().weight, entry.getValue().sources));
+            SkillTuple tup = entry.getValue();
+            aggregatedSkills.put(entry.getKey(), new AggregatedSkill(tup.weight, tup.sources, tup.hidden));
         }
 
         // tokenize key - userId:userHandle

@@ -21,10 +21,16 @@ public class AggregatedSkill {
     @Setter
     private Set<SkillSource> sources;
 
+    @JsonProperty
+    @Getter
+    @Setter
+    private boolean hidden;
+
     public AggregatedSkill() {}
 
-    public AggregatedSkill(double score, Set<SkillSource> sources) {
+    public AggregatedSkill(double score, Set<SkillSource> sources, boolean hidden) {
         this.score = score;
         this.sources = sources;
+        this.hidden = hidden;
     }
 }

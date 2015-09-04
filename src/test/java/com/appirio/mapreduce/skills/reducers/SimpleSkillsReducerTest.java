@@ -56,7 +56,8 @@ public class SimpleSkillsReducerTest {
                 new HashSet<SkillSource>(Arrays.asList(
                         SkillSource.USER_ENTERED,
                         SkillSource.CHALLENGE
-                ))
+                )),
+                false
         );
         Map<Long, AggregatedSkill> skillsMap = new HashMap<Long, AggregatedSkill>();
         skillsMap.put(1L, skill1);
