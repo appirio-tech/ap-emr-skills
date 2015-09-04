@@ -1,12 +1,14 @@
 package com.appirio.mapreduce.skills;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +27,8 @@ public class TagHelperImpl implements TagHelper {
             tagMap = new HashMap<String, Long>();
             URI[] files = context.getCacheFiles();
             Path tagFile = new Path(files[0]);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(tagFile.toString()));
+            FileSystem hdfs = FileSystem.get(context.getConfiguration());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(hdfs.open(tagFile)));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 System.out.println(line);
