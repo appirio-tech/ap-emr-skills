@@ -11,6 +11,6 @@ public interface TagHelper {
 
     void init(Mapper.Context context) throws IOException, InterruptedException;
 
-    long getTagId(String name);
+    Long getTagId(String name);
 
 }

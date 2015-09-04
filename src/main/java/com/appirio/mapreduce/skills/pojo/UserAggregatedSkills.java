@@ -16,19 +16,27 @@ public class UserAggregatedSkills {
 
     @JsonProperty
     @Getter
-    @Setter
     private String userHandle;
+
+    @Getter
+    @JsonProperty
+    private String handleLower;
 
     @Getter
     @Setter
     private String skills;
 
+    public void setUserHandle(String handle) {
+        this.userHandle = handle;
+        this.handleLower = handle.toLowerCase();
+    }
 
     public UserAggregatedSkills() {}
 
     public UserAggregatedSkills(long userId, String handle, String skills) {
         this.userId = userId;
         this.userHandle = handle;
+        this.handleLower = handle.toLowerCase();
         this.skills = skills;
     }
 }

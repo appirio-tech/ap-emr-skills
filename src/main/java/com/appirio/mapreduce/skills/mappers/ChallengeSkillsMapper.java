@@ -46,10 +46,15 @@ public class ChallengeSkillsMapper extends Mapper<LongWritable, Text, Text, Text
         MappedSkill mSkill = new MappedSkill();
         mSkill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
         mSkill.setHidden(false);
-        mSkill.setTagId(tagHelper.getTagId(inText[3]));
-        mSkill.setWeight(1);
+        Long tagId = tagHelper.getTagId(inText[3]);
+        if (tagId != null) {
+            mSkill.setTagId(tagId);
+            mSkill.setWeight(1);
 
-        Text val = new Text(mapper.writeValueAsBytes(mSkill));
-        context.write(outKey, val);
+            Text val = new Text(mapper.writeValueAsBytes(mSkill));
+            context.write(outKey, val);
+        } else {
+            log.error("Unable to retrieve TagId for '"+inText[3]+"'. Skipping");
+        }
     }
 }
