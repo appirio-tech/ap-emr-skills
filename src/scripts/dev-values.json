@@ -1,0 +1,7 @@
+{
+  "values": {
+    "mySkillAggregatorJar": "s3://supply-emr/skills/snapshot/com/appirio/services/ap-emr-skills/1.0-SNAPSHOT/ap-emr-skills-1.0-20150904.180707-5.jar",
+    "myBaseSkillEmrDir": "s3://supply-emr/skill2",
+    "myKeyPair": "topcoder-dev-vpc-app"
+  }
+}

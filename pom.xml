@@ -64,6 +64,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.sqoop</groupId>
+            <artifactId>sqoop</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.mrunit</groupId>
             <artifactId>mrunit</artifactId>
             <version>1.1.0</version>

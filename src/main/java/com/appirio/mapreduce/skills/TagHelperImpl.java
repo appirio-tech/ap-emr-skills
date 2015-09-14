@@ -6,7 +6,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
