@@ -121,16 +121,30 @@
             </extension>
         </extensions>
     </build>
+    <!--For Dev env-->
+    <!--<distributionManagement>-->
+        <!--<repository>-->
+            <!--<id>aws-release</id>-->
+            <!--<name>AWS Release Repository</name>-->
+            <!--<url>s3://supply-emr/skills/release</url>-->
+        <!--</repository>-->
+        <!--<snapshotRepository>-->
+            <!--<id>aws-snapshot</id>-->
+            <!--<name>AWS Snapshot Repository</name>-->
+            <!--<url>s3://supply-emr/skills/snapshot</url>-->
+        <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
+    <!--For QA env-->
     <distributionManagement>
         <repository>
             <id>aws-release</id>
             <name>AWS Release Repository</name>
-            <url>s3://supply-emr/skills/release</url>
+            <url>s3://supply-emr-qa/skills/release</url>
         </repository>
         <snapshotRepository>
             <id>aws-snapshot</id>
             <name>AWS Snapshot Repository</name>
-            <url>s3://supply-emr/skills/snapshot</url>
+            <url>s3://supply-emr-qa/skills/snapshot</url>
         </snapshotRepository>
     </distributionManagement>
 </project>
