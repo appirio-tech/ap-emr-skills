@@ -1,6 +1,6 @@
 [{
   "Name": "Install Sqoop",
-  "Args": ["s3://supply-emr/scripts/install_sqoop.sh"],
+  "Args": ["s3://supply-emr-qa/scripts/install_sqoop.sh"],
   "Jar": "s3://elasticmapreduce/libs/script-runner/script-runner.jar",
   "ActionOnFailure": "CANCEL_AND_WAIT",
   "Type": "CUSTOM_JAR"
@@ -13,9 +13,9 @@
 }, {
   "Name": "Import Challenge Skills",
   "Args": [
-    "s3://supply-emr/scripts/run_sqoop.sh",
+    "s3://supply-emr-qa/scripts/run_sqoop.sh",
     "-f",
-    "s3://supply-emr/scripts/sqoop.challengeSkills.txt"
+    "s3://supply-emr-qa/scripts/sqoop.challengeSkills"
   ],
   "Jar": "s3://elasticmapreduce/libs/script-runner/script-runner.jar",
   "ActionOnFailure": "CANCEL_AND_WAIT",
@@ -24,7 +24,7 @@
   "Name": "Import User Entered Skills",
   "Args": [
     "-f",
-    "s3://supply-emr/scripts/hive.memberEnteredSkills.import.hql"
+    "s3://supply-emr-qa/hive/hive.memberEnteredSkills.import.hql"
   ],
   "Jar": "command-runner.jar",
   "ActionOnFailure": "CANCEL_AND_WAIT",
@@ -38,13 +38,13 @@
     "hdfs:///user/supply/skills/input/challenge/",
     "hdfs:///user/supply/skills/output/aggregatedSkills/"
   ],
-  "Jar": "s3://supply-emr/skills/snapshot/com/appirio/services/ap-emr-skills/1.0-SNAPSHOT/ap-emr-skills-1.0-20150901.232528-2.jar",
+  "Jar": "s3://supply-emr-qa/skills/snapshot/com/appirio/services/ap-emr-skills/1.0-SNAPSHOT/ap-emr-skills-1.0-20150918.042234-1.jar",
   "ActionOnFailure": "CANCEL_AND_WAIT",
   "Type": "CUSTOM_JAR"
 }, {
   "Name": "Export Aggregated Skills",
   "Args": [
-    "s3://supply-emr/scripts/hive.aggregatedSkills.export.sql",
+    "s3://supply-emr-qa/hive/hive.aggregatedSkills.export.sql",
     "-hiveconf",
     "CURRENT_DATE="
   ],

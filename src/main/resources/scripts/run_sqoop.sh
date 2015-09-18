@@ -2,7 +2,7 @@
 
 cd 
 SQOOP_INSTALL_DIR=./sqoop-1.4.6.bin__hadoop-2.0.4-alpha/bin/
-#SCRIPT_FILE = s3://supply-emr/scripts/sqoop.challengeSkills.txt
+#SCRIPT_FILE = s3://supply-emr-qa/scripts/sqoop.challengeSkills
 
 while getopts ":f:" opt; do
   case $opt in

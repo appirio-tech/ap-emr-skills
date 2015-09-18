@@ -3,8 +3,8 @@
 --
 
 -- Include jar necessary for serde
-add jar s3://supply-emr/scripts/json-serde-1.3-jar-with-dependencies.jar;
-add jar s3://supply-emr/scripts/brickhouse-0.7.1-SNAPSHOT.jar;
+add jar s3://supply-emr-qa/JAR_DIR/json-serde-1.3-jar-with-dependencies.jar;
+add jar s3://supply-emr-qa/JAR_DIR/brickhouse-0.7.1-SNAPSHOT.jar;
 CREATE TEMPORARY FUNCTION to_json AS 'brickhouse.udf.json.ToJsonUDF';
 
 -- setup table to read data from

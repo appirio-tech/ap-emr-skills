@@ -40,7 +40,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"
@@ -79,7 +79,7 @@
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.memberEnteredSkills.import.hql"
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.memberEnteredSkills.import.hql"
     },
     {
       "id": "aggregateSkillscActivityId",
@@ -111,7 +111,7 @@
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.aggregatedSkills.export.hql,-d,OUTPUT_DIR=#{myBaseSkillEmrDir}/output/2015-09-09T02:00:00z"
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.aggregatedSkills.export.hql,-d,OUTPUT_DIR=#{myBaseSkillEmrDir}/output/2015-09-09T02:00:00z"
     },
     {
       "id": "Default",
@@ -145,7 +145,7 @@
     {
       "id": "myKeyPair",
       "type": "String",
-      "default": "topcoder-dev-vpc-app"
+      "default": "topcoder-qa-vpc-app"
     }
   ]
 }

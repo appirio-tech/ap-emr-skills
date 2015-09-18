@@ -16,7 +16,7 @@ while getopts ":i:" opt; do
 done
 
 
-aws s3 cp $BASE_SKILL_EMR_DIR/input/tagsMap/tagsMap.txt tagsMap.txt
+aws s3 cp $BASE_SKILL_EMR_DIR/data/tagsMap.txt tagsMap.txt
 if [[ $? != 0 ]]; then 
   echo "Failed to copy tagsMap.txt from $BASE_SKILL_EMR_DIR/input/tagsMap/tagsMap.txt"
   exit $rc
