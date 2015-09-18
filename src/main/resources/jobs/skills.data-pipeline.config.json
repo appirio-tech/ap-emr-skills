@@ -1,0 +1,151 @@
+{
+  "objects": [
+    {
+      "id": "myDataNodeId",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "filePath": "#{myBaseSkillEmrDir}/input/userSkills",
+      "name": "User Skill S3",
+      "type": "S3DataNode"
+    },
+    {
+      "terminateAfter": "1 Hour",
+      "id": "skillEmrClusterId",
+      "amiVersion": "3.9.0",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "keyPair": "#{myKeyPair}",
+      "masterInstanceType": "m1.medium",
+      "coreInstanceType": "m1.medium",
+      "enableDebugging": "true",
+      "name": "SkillEmrCluster",
+      "coreInstanceCount": "2",
+      "type": "EmrCluster",
+      "bootstrapAction": "s3://elasticmapreduce/bootstrap-actions/configure-hadoop,-e,fs.s3.consistent=true,-e, fs.s3.consistent.metadata.tableName=EmrFSMetadata, -e, fs.s3.consistent.retryCount=5, -e, fs.s3.consistent.retryPeriodSeconds=10, -e, fs.s3.enableServerSideEncryption=true",
+      "actionOnTaskFailure": "continue"
+    },
+    {
+      "id": "setupStepId",
+      "name": "Setup",
+      "type" : "ShellCommandActivity",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/setup_env.sh setup_env.sh; source ./setup_env.sh",
+      "runsOn": { "ref": "skillEmrClusterId" },
+      "schedule": {
+        "ref": "mySchedule"
+      }
+    },
+    {
+      "id": "importChallengeSkillActivityId",
+      "name": "Sqoop challenges skills activity",
+      "type" : "ShellCommandActivity",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt",
+      "runsOn": { "ref": "skillEmrClusterId" },
+      "dependsOn": {
+        "ref": "setupStepId"
+      },
+      "schedule": {
+        "ref": "mySchedule"
+      }
+    },
+    {
+      "id": "importTagsMapActivityId",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "name": "Import tags map from DynamoDb",
+      "runsOn": {
+        "ref": "skillEmrClusterId"
+      },
+      "dependsOn": {
+        "ref": "importChallengeSkillActivityId"
+      },
+      "maximumRetries": "0",
+      "type": "ShellCommandActivity",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/importTagsMap.sh importTagsMap.sh; source importTagsMap.sh -i #{myBaseSkillEmrDir}"
+    },
+    {
+      "id": "importUserSkillsActivityId",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "name": "EMR Hive Job - importing user entered skills",
+      "runsOn": {
+        "ref": "skillEmrClusterId"
+      },
+      "dependsOn": {
+        "ref": "importTagsMapActivityId"
+      },
+      "maximumRetries": "0",
+      "type": "EmrActivity",
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.memberEnteredSkills.import.hql"
+    },
+    {
+      "id": "aggregateSkillscActivityId",
+      "name": "Hadoop activity to aggregate skills",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "runsOn": {
+        "ref": "skillEmrClusterId"
+      },
+      "dependsOn": {
+        "ref": "importUserSkillsActivityId"
+      },
+      "maximumRetries": "0",
+      "type": "EmrActivity",
+      "step": ["#{mySkillAggregatorJar},com.appirio.mapreduce.skills.SkillsAggregator,hdfs:///user/supply/skills/input/tagsMap/tagsMap.txt,hdfs:///user/supply/skills/input/userEntered/,hdfs:///user/supply/skills/input/challenge/,hdfs:///user/supply/skills/output/aggregatedSkills/"]
+    },
+    {
+      "id": "exportAggregatedSkillsActivityId",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "name": "Export aggregated skills to dynamodb & s3",
+      "runsOn": {
+        "ref": "skillEmrClusterId"
+      },
+      "dependsOn": {
+        "ref": "aggregateSkillscActivityId"
+      },
+      "maximumRetries": "0",
+      "type": "EmrActivity",
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.aggregatedSkills.export.hql,-d,OUTPUT_DIR=#{myBaseSkillEmrDir}/output/2015-09-09T02:00:00z"
+    },
+    {
+      "id": "Default",
+      "scheduleType": "CRON",
+      "failureAndRerunMode": "CASCADE",
+      "name": "Default",
+      "pipelineLogUri": "#{myBaseSkillEmrDir}/logs",
+      "role": "EMR_Default_Role",
+      "resourceRole": "EMR_Default_Role"
+    },
+    {
+      "id": "mySchedule",
+      "startDateTime": "2015-09-12T00:00:00",
+      "name": "MyEMRJobSchedule",
+      "type": "Schedule",
+      "period": "1 Day",
+      "endDateTime": "2015-09-16T00:00:00"
+    }
+  ],
+  "parameters": [
+    {
+      "id": "myBaseSkillEmrDir",
+      "description": "Base skills input",
+      "type": "String"
+    },
+    {
+      "id": "mySkillAggregatorJar",
+      "description": "Skills Aggregator jar",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "id": "myKeyPair",
+      "type": "String",
+      "default": "topcoder-dev-vpc-app"
+    }
+  ]
+}

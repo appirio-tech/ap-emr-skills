@@ -1,0 +1,54 @@
+[{
+  "Name": "Install Sqoop",
+  "Args": ["s3://supply-emr/scripts/install_sqoop.sh"],
+  "Jar": "s3://elasticmapreduce/libs/script-runner/script-runner.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "CUSTOM_JAR"
+}, {
+  "Name": "Import Tags",
+  "Args": ["s3://supply-emr/scripts/hive.tagsMap.sql"],
+  "Jar": "command-runner.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "HIVE"
+}, {
+  "Name": "Import Challenge Skills",
+  "Args": [
+    "s3://supply-emr/scripts/run_sqoop.sh",
+    "-f",
+    "s3://supply-emr/scripts/sqoop.challengeSkills.txt"
+  ],
+  "Jar": "s3://elasticmapreduce/libs/script-runner/script-runner.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "CUSTOM_JAR"
+}, {
+  "Name": "Import User Entered Skills",
+  "Args": [
+    "-f",
+    "s3://supply-emr/scripts/hive.memberEnteredSkills.import.hql"
+  ],
+  "Jar": "command-runner.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "HIVE"
+}, {
+  "Name": "Aggregate Skills",
+  "Args": [
+    "com.appirio.mapreduce.skills.SkillsAggregator",
+    "hdfs:///user/supply/skills/input/tagsMap.txt",
+    "hdfs:///user/supply/skills/input/userEntered/",
+    "hdfs:///user/supply/skills/input/challenge/",
+    "hdfs:///user/supply/skills/output/aggregatedSkills/"
+  ],
+  "Jar": "s3://supply-emr/skills/snapshot/com/appirio/services/ap-emr-skills/1.0-SNAPSHOT/ap-emr-skills-1.0-20150901.232528-2.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "CUSTOM_JAR"
+}, {
+  "Name": "Export Aggregated Skills",
+  "Args": [
+    "s3://supply-emr/scripts/hive.aggregatedSkills.export.sql",
+    "-hiveconf",
+    "CURRENT_DATE="
+  ],
+  "Jar": "command-runner.jar",
+  "ActionOnFailure": "CANCEL_AND_WAIT",
+  "Type": "HIVE"
+}]
