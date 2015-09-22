@@ -40,7 +40,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh #{myJdbcDriver} #{myConnectUrl} #{myUser} #{myPassword}",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh #{myConnectUrl} #{myUsername} #{myPassword}",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"
@@ -91,14 +91,14 @@
         "ref": "skillEmrClusterId"
       },
       "dependsOn": {
-        "ref": "importTagsMapActivityId"
+        "ref": "importUserSkillsActivityId"
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.stackOverflowSkills.import.hql,-hiveconf,JAR_DIR=#{myJarDir}"
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.stackOverflowSkills.import.hql,-hiveconf,JAR_DIR=#{myJarDir}"
     },
     {
-      "id": "aggregateSkillscActivityId",
+      "id": "aggregateSkillsActivityId",
       "name": "Hadoop activity to aggregate skills",
       "schedule": {
         "ref": "mySchedule"
@@ -107,7 +107,7 @@
         "ref": "skillEmrClusterId"
       },
       "dependsOn": {
-        "ref": "importUserSkillsActivityId"
+        "ref": "importStackOverflowSkillsActivityId"
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
@@ -123,7 +123,7 @@
         "ref": "skillEmrClusterId"
       },
       "dependsOn": {
-        "ref": "aggregateSkillscActivityId"
+        "ref": "aggregateSkillsActivityId"
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
@@ -169,17 +169,12 @@
       "type": "AWS::S3::ObjectKey"
     },
     {
-      "id": "myJdbcDriver",
-      "description": "JDBC Driver",
-      "type": "String"
-    },
-    {
       "id": "myConnectUrl",
       "description": "JDBC Connect URL",
       "type": "String"
     },
     {
-      "id": "myUser",
+      "id": "myUsername",
       "description": "Username for Database",
       "type": "String"
     },
