@@ -30,7 +30,7 @@
       "id": "setupStepId",
       "name": "Setup",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/setup_env.sh setup_env.sh; source ./setup_env.sh",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/setup_env.sh setup_env.sh; source ./setup_env.sh #{myJarDir}",
       "runsOn": { "ref": "skillEmrClusterId" },
       "schedule": {
         "ref": "mySchedule"
@@ -40,7 +40,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh #{myJdbcDriver} #{myConnectUrl} #{myUser} #{myPassword}",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"
@@ -79,7 +79,7 @@
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.memberEnteredSkills.import.hql"
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.memberEnteredSkills.import.hql,-hiveconf,JAR_DIR=#{myJarDir}"
     },
     {
       "id": "aggregateSkillscActivityId",
@@ -111,7 +111,7 @@
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.aggregatedSkills.export.hql,-d,OUTPUT_DIR=#{myBaseSkillEmrDir}/output/2015-09-09T02:00:00z"
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.aggregatedSkills.export.hql,-hiveconf,JAR_DIR=#{myJarDir},-hiveconf,OUTPUT_DIR=#{myBaseSkillEmrDir}/output"
     },
     {
       "id": "Default",
@@ -145,7 +145,32 @@
     {
       "id": "myKeyPair",
       "type": "String",
-      "default": "topcoder-qa-vpc-app"
+      "default": "topcoder-QA-apps-20141014"
+    },
+    {
+      "id": "myJarDir",
+      "description": "S3 bucket for Dependencies",
+      "type": "AWS::S3::ObjectKey"
+    },
+    {
+      "id": "myJdbcDriver",
+      "description": "JDBC Driver",
+      "type": "String"
+    },
+    {
+      "id": "myConnectUrl",
+      "description": "JDBC Connect URL",
+      "type": "String"
+    },
+    {
+      "id": "myUser",
+      "description": "Username for Database",
+      "type": "String"
+    },
+    {
+      "id": "myPassword",
+      "description": "Password for Database",
+      "type": "String"
     }
   ]
 }

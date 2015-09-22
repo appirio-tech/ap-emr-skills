@@ -1,9 +1,12 @@
 #!/bin/bash
 #Install Sqoop - s3://<BUCKET_NAME>/install_sqoop.sh
 
-echo "Downloading Sqoop.tar from s3://supply-emr-qa/JAR_DIR/sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz"
+jarDir=$1
+echo "jarDir passed $jarDir"
+
+echo "Downloading Sqoop.tar from $jarDir/sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz"
 cd
-hadoop fs -copyToLocal s3://supply-emr-qa/JAR_DIR/sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz
+hadoop fs -copyToLocal $jarDir/sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz
 
 if [ -f "./sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz" ]; then
   echo "Sqoop tar copied"
@@ -13,7 +16,7 @@ else
 fi
 
 tar -xzf sqoop-1.4.6.bin__hadoop-2.0.4-alpha.tar.gz
-hadoop fs -copyToLocal s3://supply-emr-qa/JAR_DIR/ifxjdbc.jar ifxjdbc.jar
+hadoop fs -copyToLocal $jarDir/ifxjdbc.jar ifxjdbc.jar
 
 if [ -f "./ifxjdbc.jar" ]; then
   echo "ifxjdbc.jar copied"

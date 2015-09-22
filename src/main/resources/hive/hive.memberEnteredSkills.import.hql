@@ -3,7 +3,7 @@
 --
 
 -- import json serde jars
-add jar s3://supply-emr-qa/JAR_DIR/brickhouse-0.7.1-SNAPSHOT.jar;
+add jar ${hiveconf:JAR_DIR}/brickhouse-0.7.1-SNAPSHOT.jar;
 -- creating function to export as json
 CREATE TEMPORARY FUNCTION to_json AS 'brickhouse.udf.json.ToJsonUDF';
 

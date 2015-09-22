@@ -3,8 +3,8 @@
 --
 
 -- Include jar necessary for serde
-add jar s3://supply-emr-qa/JAR_DIR/json-serde-1.3-jar-with-dependencies.jar;
-add jar s3://supply-emr-qa/JAR_DIR/brickhouse-0.7.1-SNAPSHOT.jar;
+add jar ${hiveconf:JAR_DIR}/json-serde-1.3-jar-with-dependencies.jar;
+add jar ${hiveconf:JAR_DIR}/brickhouse-0.7.1-SNAPSHOT.jar;
 CREATE TEMPORARY FUNCTION to_json AS 'brickhouse.udf.json.ToJsonUDF';
 
 -- setup table to read data from
@@ -37,5 +37,5 @@ TBLPROPERTIES
 INSERT OVERWRITE TABLE db_aggregated_skills SELECT * FROM hive_aggregated_skills;
 
 -- also write files to S3
-INSERT OVERWRITE DIRECTORY '${hiveconf:OUTPUT_DIR}' 
+INSERT OVERWRITE DIRECTORY '${hiveconf:OUTPUT_DIR}'
 SELECT to_json( named_struct("userId", userId, "userHandle", userHandle, "skills", skills)) FROM hive_aggregated_skills;
