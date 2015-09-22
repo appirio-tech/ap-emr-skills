@@ -6,6 +6,7 @@ package com.appirio.mapreduce.skills;
 
 import com.appirio.mapreduce.skills.combiners.SkillsCombiner;
 import com.appirio.mapreduce.skills.mappers.ChallengeSkillsMapper;
+import com.appirio.mapreduce.skills.mappers.StackOverflowSkillsMapper;
 import com.appirio.mapreduce.skills.mappers.UserEnteredSkillsMapper;
 import com.appirio.mapreduce.skills.reducers.SimpleSkillsReducer;
 import org.apache.hadoop.conf.Configuration;
@@ -27,6 +28,7 @@ public class SkillsAggregator extends Configured implements Tool {
     // input URIs
     private String userEnteredSkillsURI;
     private String challengeSkillsURI;
+    private String stackOverflowSkillsURI;
 
     private String tagsFileURI;
 
@@ -34,18 +36,20 @@ public class SkillsAggregator extends Configured implements Tool {
     private String outputURI;
 
     private int initArgs(String[] args) {
-        if (args.length != 4) {
-            System.err.printf("Usage: %s <tagsMap> <userEnteredSkills> <challengeSkills> <output> \n", getClass().getSimpleName());
+        if (args.length != 5) {
+            System.err.printf("Usage: %s <tagsMap> <userEnteredSkills> <challengeSkills> <externalStackOverflow> <output> \n", getClass().getSimpleName());
             ToolRunner.printGenericCommandUsage(System.err);
             return -1;
         }
         tagsFileURI = args[0];
         userEnteredSkillsURI = args[1];
         challengeSkillsURI = args[2];
-        outputURI = args[3];
+        stackOverflowSkillsURI = args[3];
+        outputURI = args[4];
         System.out.println("TagFilesURI: " + tagsFileURI);
         System.out.println("userEnteredSkillsURI: " + userEnteredSkillsURI);
         System.out.println("challengeSkillsURI: " + challengeSkillsURI);
+        System.out.println("stackOverflowSkillsURI: " + stackOverflowSkillsURI);
         System.out.println("outputURI: " + outputURI);
 
         return 0;
@@ -70,6 +74,9 @@ public class SkillsAggregator extends Configured implements Tool {
         // challenge skills
         MultipleInputs.addInputPath(job, new Path(challengeSkillsURI),
                 TextInputFormat.class, ChallengeSkillsMapper.class);
+        // stackoverflow skills
+        MultipleInputs.addInputPath(job, new Path(stackOverflowSkillsURI),
+                TextInputFormat.class, StackOverflowSkillsMapper.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(Text.class);
 

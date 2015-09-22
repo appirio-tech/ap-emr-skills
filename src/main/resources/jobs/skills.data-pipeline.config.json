@@ -82,6 +82,22 @@
       "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/hive/hive.memberEnteredSkills.import.hql,-hiveconf,JAR_DIR=#{myJarDir}"
     },
     {
+      "id": "importStackOverflowSkillsActivityId",
+      "schedule": {
+        "ref": "mySchedule"
+      },
+      "name": "EMR Hive Job - importing stack overflow skills",
+      "runsOn": {
+        "ref": "skillEmrClusterId"
+      },
+      "dependsOn": {
+        "ref": "importTagsMapActivityId"
+      },
+      "maximumRetries": "0",
+      "type": "EmrActivity",
+      "step": "s3://us-east-1.elasticmapreduce/libs/script-runner/script-runner.jar,s3://us-east-1.elasticmapreduce/libs/hive/hive-script,--base-path,s3://us-east-1.elasticmapreduce/libs/hive/,--hive-versions,latest,--run-hive-script,--args,-f,#{myBaseSkillEmrDir}/scripts/hive.stackOverflowSkills.import.hql,-hiveconf,JAR_DIR=#{myJarDir}"
+    },
+    {
       "id": "aggregateSkillscActivityId",
       "name": "Hadoop activity to aggregate skills",
       "schedule": {

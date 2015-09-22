@@ -51,6 +51,8 @@ hadoop fs -mkdir hdfs:///user/supply/skills/input/userEntered/
 #fixme
 echo 'Creating : hdfs:///user/supply/skills/input/challenge/'
 hadoop fs -mkdir hdfs:///user/supply/skills/input/challenge/
+echo 'Creating : hdfs:///user/supply/skills/input/stackOverflow'
+hadoop fs -mkdir hdfs:///user/supply/skills/input/stackOverflow/
 
 echo 'Creating : hdfs:///user/supply/skills/output/'
 hadoop fs -mkdir hdfs:///user/supply/skills/output/
