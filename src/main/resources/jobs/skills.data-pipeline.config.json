@@ -111,7 +111,7 @@
       },
       "maximumRetries": "0",
       "type": "EmrActivity",
-      "step": ["#{mySkillAggregatorJar},com.appirio.mapreduce.skills.SkillsAggregator,hdfs:///user/supply/skills/input/tagsMap/tagsMap.txt,hdfs:///user/supply/skills/input/userEntered/,hdfs:///user/supply/skills/input/challenge/,hdfs:///user/supply/skills/output/aggregatedSkills/"]
+      "step": ["#{mySkillAggregatorJar},com.appirio.mapreduce.skills.SkillsAggregator,hdfs:///user/supply/skills/input/tagsMap/tagsMap.txt,hdfs:///user/supply/skills/input/userEntered/,hdfs:///user/supply/skills/input/challenge/,hdfs:///user/supply/skills/input/stackOverflow/,hdfs:///user/supply/skills/output/aggregatedSkills/"]
     },
     {
       "id": "exportAggregatedSkillsActivityId",
