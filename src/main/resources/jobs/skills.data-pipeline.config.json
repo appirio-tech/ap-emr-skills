@@ -40,7 +40,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh #{myConnectUrl} #{myUsername} #{myPassword}",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt #{myConnectUrl} #{myUsername} #{myPassword}",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"
