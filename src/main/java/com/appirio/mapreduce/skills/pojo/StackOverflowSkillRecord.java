@@ -11,12 +11,12 @@ import lombok.Setter;
 
 
 public class StackOverflowSkillRecord {
-    @JsonProperty("userId")
+    @JsonProperty("userid")
     @Getter
     @Setter
     private long userId;
 
-    @JsonBackReference("topTags")
+    @JsonBackReference("toptags")
     @Getter
     @Setter
     private String topTags;
