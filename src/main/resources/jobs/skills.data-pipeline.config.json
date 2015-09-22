@@ -40,7 +40,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"
@@ -119,8 +119,8 @@
       "failureAndRerunMode": "CASCADE",
       "name": "Default",
       "pipelineLogUri": "#{myBaseSkillEmrDir}/logs",
-      "role": "EMR_Default_Role",
-      "resourceRole": "EMR_Default_Role"
+      "role": "ap-emr-skills-qa",
+      "resourceRole": "ap-emr-skills-qa"
     },
     {
       "id": "mySchedule",

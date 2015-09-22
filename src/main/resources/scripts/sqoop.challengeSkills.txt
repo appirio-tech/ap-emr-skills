@@ -10,7 +10,7 @@ com.informix.jdbc.IfxDriver
 
 # Connect parameter and value
 --connect
-"jdbc:informix-sqli://10.15.94.51:2020/tcs_dw:INFORMIXSERVER=datawarehouse_tcp;IFX_LOCK_MODE_WAIT=5;OPTCOMPIND=0;STMT_CACHE=1;"
+"jdbc:informix-sqli://10.20.94.51:2020/tcs_dw:INFORMIXSERVER=datawarehouse_tcp;IFX_LOCK_MODE_WAIT=5;OPTCOMPIND=0;STMT_CACHE=1;"
 
 --username
 coder
@@ -18,6 +18,7 @@ coder
 --password
 Qn8TZxFFD77tzQwc
 
+--verbose
 
 ## Query
 --query

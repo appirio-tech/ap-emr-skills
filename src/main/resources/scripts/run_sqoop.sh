@@ -2,7 +2,7 @@
 
 cd 
 SQOOP_INSTALL_DIR=./sqoop-1.4.6.bin__hadoop-2.0.4-alpha/bin/
-#SCRIPT_FILE = s3://supply-emr-qa/scripts/sqoop.challengeSkills
+#SCRIPT_FILE = s3://supply-emr-qa/scripts/sqoop.challengeSkills.txt\
 
 while getopts ":f:" opt; do
   case $opt in
@@ -32,6 +32,8 @@ echo "Fetching $SCRIPT_FILE... "
 aws s3 cp $SCRIPT_FILE ./sqoop.options.txt
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
+echo "$SCRIPT_FILE download done..."
+
 
 if [ ! -f "./sqoop.options.txt" ]; then
  echo "Options file is missing;"
@@ -46,5 +48,7 @@ fi
 
 # finally execute the command
 
+echo "RUNNING OPTIONS file"
 $SQOOP_INSTALL_DIR/sqoop --options-file ./sqoop.options.txt
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+echo "Done with RUN SCOOP "

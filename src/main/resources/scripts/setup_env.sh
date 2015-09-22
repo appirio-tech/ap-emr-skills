@@ -45,8 +45,9 @@ echo 'Creating : hdfs:///user/supply/skills/input/tagsMap/'
 hadoop fs -mkdir hdfs:///user/supply/skills/input/tagsMap/
 echo 'Creating : hdfs:///user/supply/skills/input/userEntered/'
 hadoop fs -mkdir hdfs:///user/supply/skills/input/userEntered/
-# echo 'Creating : hdfs:///user/supply/skills/input/challenge/'
-# hadoop fs -mkdir hdfs:///user/supply/skills/input/challenge/
+#fixme
+echo 'Creating : hdfs:///user/supply/skills/input/challenge/'
+hadoop fs -mkdir hdfs:///user/supply/skills/input/challenge/
 
 echo 'Creating : hdfs:///user/supply/skills/output/'
 hadoop fs -mkdir hdfs:///user/supply/skills/output/
