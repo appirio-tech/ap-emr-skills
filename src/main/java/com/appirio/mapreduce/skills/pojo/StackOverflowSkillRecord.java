@@ -16,7 +16,7 @@ public class StackOverflowSkillRecord {
     @Setter
     private long userId;
 
-    @JsonBackReference("toptags")
+    @JsonProperty("toptags")
     @Getter
     @Setter
     private String topTags;

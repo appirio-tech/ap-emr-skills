@@ -52,8 +52,8 @@ public class StackOverflowSkillsMapperTest {
     @Test
     public void testMapper() throws IOException {
         List<Pair<LongWritable, Text>> input = new ArrayList<Pair<LongWritable, Text>>();
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("{\"userId\":111,\"topTags\":\"Java,Javascript\"}")));
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("{\"userId\":222,\"topTags\":\"Java\"}")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("{\"userid\":111,\"toptags\":\"Java,Javascript\"}")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("{\"userid\":222,\"toptags\":\"Java\"}")));
 
         mapDriver.withAll(input);
 
