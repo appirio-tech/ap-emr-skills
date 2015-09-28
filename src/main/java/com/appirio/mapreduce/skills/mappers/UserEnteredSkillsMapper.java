@@ -40,7 +40,7 @@ public class UserEnteredSkillsMapper extends Mapper<LongWritable, Text, Text, Te
         UserEnteredSkillRecord skillRec = mapper.readValue(value.getBytes(), UserEnteredSkillRecord.class);
 
         // create key
-        String outKeyStr = skillRec.getUserId();
+        String outKeyStr = String.valueOf(skillRec.getUserId());
         Text outKey = new Text(outKeyStr);
 
         Map<Long, UserEnteredSkill> skillsMap = mapper.readValue(

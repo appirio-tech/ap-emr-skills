@@ -47,7 +47,7 @@ public class UserEnteredSkillsMapperTest {
         skill2.setTagId(2L);
         skill2.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.USER_ENTERED)));
         List<Pair<Text, Text>> output = new ArrayList<Pair<Text, Text>>();
-        final Text outKey = new Text("1:albertwang");
+        final Text outKey = new Text("1");
         ObjectMapper objMapper = new ObjectMapper();
         output.add(new Pair<Text, Text>(outKey, new Text(objMapper.writeValueAsString(skill1))));
         output.add(new Pair<Text, Text>(outKey, new Text(objMapper.writeValueAsString(skill2))));
