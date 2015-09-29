@@ -121,6 +121,72 @@
             </extension>
         </extensions>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>dev</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>aws-release</id>
+                    <name>AWS Release Repository</name>
+                    <url>s3://supply-emr/skills/release</url>
+                </repository>
+                <snapshotRepository>
+                    <id>aws-snapshot</id>
+                    <name>AWS Snapshot Repository</name>
+                    <url>s3://supply-emr/skills/snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>qa</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>qa</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>aws-release</id>
+                    <name>AWS Release Repository</name>
+                    <url>s3://supply-emr-qa/skills/release</url>
+                </repository>
+                <snapshotRepository>
+                    <id>aws-snapshot</id>
+                    <name>AWS Snapshot Repository</name>
+                    <url>s3://supply-emr-qa/skills/snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <property>
+                    <name>env</name>
+                    <value>prod</value>
+                </property>
+            </activation>
+            <distributionManagement>
+                <repository>
+                    <id>aws-release</id>
+                    <name>AWS Release Repository</name>
+                    <url>s3://supply-emr-prod/skills/release</url>
+                </repository>
+                <snapshotRepository>
+                    <id>aws-snapshot</id>
+                    <name>AWS Snapshot Repository</name>
+                    <url>s3://supply-emr-prod/skills/snapshot</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+    </profiles>
     <!--For Dev env-->
     <!--<distributionManagement>-->
         <!--<repository>-->
@@ -135,16 +201,4 @@
         <!--</snapshotRepository>-->
     <!--</distributionManagement>-->
     <!--For QA env-->
-    <distributionManagement>
-        <repository>
-            <id>aws-release</id>
-            <name>AWS Release Repository</name>
-            <url>s3://supply-emr-qa/skills/release</url>
-        </repository>
-        <snapshotRepository>
-            <id>aws-snapshot</id>
-            <name>AWS Snapshot Repository</name>
-            <url>s3://supply-emr-qa/skills/snapshot</url>
-        </snapshotRepository>
-    </distributionManagement>
 </project>
