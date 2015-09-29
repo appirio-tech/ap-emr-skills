@@ -50,6 +50,5 @@ fi
 # finally execute the command
 echo "RUNNING SQOOP command"
 $SQOOP_INSTALL_DIR/sqoop --options-file ./sqoop.options.txt --connect $connect --username $username --password $password
-#fixme
-#rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 echo "Done with RUN SCOOP "
