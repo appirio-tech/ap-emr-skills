@@ -1,39 +1,24 @@
 #!/bin/bash
 
+if [ $# -ne 4 ]
+  then
+    echo "Usage run_sqoop.sh <connecturl> <username> <password> <scriptfilepath>"
+    exit 1
+fi
+
 connect=$1
 username=$2
 password=$3
+s3filepath=$4
 
-cd 
+echo "connect is $connect"
+echo "username is $username"
+echo "scriptfilepath is $s3filepath"
+
+cd
 SQOOP_INSTALL_DIR=./sqoop-1.4.6.bin__hadoop-2.0.4-alpha/bin/
-#SCRIPT_FILE=s3://supply-emr/scripts/sqoop.challengeSkills.txt\
 
-while getopts ":f:" opt; do
-  case $opt in
-    f)
-      SCRIPT_FILE="$OPTARG"
-      ;;
-    \?)
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-      ;;
-  esac
-done
-
-if [ -z "$SCRIPT_FILE" ]; then
- echo "-f file is required."
- exit 1
-fi
-if [ -f "./scoop.options.txt" ]; then
-  rm ./sqoop.options.txt
-fi
-
-echo "Fetching $SCRIPT_FILE... "
-aws s3 cp $SCRIPT_FILE ./sqoop.options.txt
+aws s3 cp $s3filepath ./sqoop.options.txt
 rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
 if [ ! -f "./sqoop.options.txt" ]; then

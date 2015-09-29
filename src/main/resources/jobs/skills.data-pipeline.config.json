@@ -23,6 +23,7 @@
       "name": "SkillEmrCluster",
       "coreInstanceCount": "2",
       "type": "EmrCluster",
+      "subnetId": "subnet-96874bbd",
       "bootstrapAction": "s3://elasticmapreduce/bootstrap-actions/configure-hadoop,-e,fs.s3.consistent=true,-e, fs.s3.consistent.metadata.tableName=EmrFSMetadata, -e, fs.s3.consistent.retryCount=5, -e, fs.s3.consistent.retryPeriodSeconds=10, -e, fs.s3.enableServerSideEncryption=true",
       "actionOnTaskFailure": "continue"
     },
@@ -40,7 +41,7 @@
       "id": "importChallengeSkillActivityId",
       "name": "Sqoop challenges skills activity",
       "type" : "ShellCommandActivity",
-      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh -f #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt #{myConnectUrl} #{myUsername} #{myPassword}",
+      "command": "aws s3 cp #{myBaseSkillEmrDir}/scripts/run_sqoop.sh run_sqoop.sh; echo \"copied run_sqoop.sh\"; source ./run_sqoop.sh #{myConnectUrl} #{myUsername} #{myPassword} #{myBaseSkillEmrDir}/scripts/sqoop.challengeSkills.txt",
       "runsOn": { "ref": "skillEmrClusterId" },
       "dependsOn": {
         "ref": "setupStepId"

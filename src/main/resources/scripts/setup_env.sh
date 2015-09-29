@@ -1,6 +1,12 @@
 #!/bin/bash
 #Install Sqoop - s3://<BUCKET_NAME>/install_sqoop.sh
 
+if [ $# -ne 1 ]
+  then
+    echo "Usage setup_env.sh <jardirpath>"
+    exit 1
+fi
+
 jarDir=$1
 echo "jarDir passed $jarDir"
 
@@ -49,8 +55,8 @@ hadoop fs -mkdir hdfs:///user/supply/skills/input/tagsMap/
 echo 'Creating : hdfs:///user/supply/skills/input/userEntered/'
 hadoop fs -mkdir hdfs:///user/supply/skills/input/userEntered/
 #fixme
-echo 'Creating : hdfs:///user/supply/skills/input/challenge/'
-hadoop fs -mkdir hdfs:///user/supply/skills/input/challenge/
+#echo 'Creating : hdfs:///user/supply/skills/input/challenge/'
+#hadoop fs -mkdir hdfs:///user/supply/skills/input/challenge/
 echo 'Creating : hdfs:///user/supply/skills/input/stackOverflow'
 hadoop fs -mkdir hdfs:///user/supply/skills/input/stackOverflow/
 
