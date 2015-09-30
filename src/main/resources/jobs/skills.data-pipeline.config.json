@@ -23,7 +23,6 @@
       "name": "SkillEmrCluster",
       "coreInstanceCount": "2",
       "type": "EmrCluster",
-      "subnetId": "subnet-96874bbd",
       "bootstrapAction": "s3://elasticmapreduce/bootstrap-actions/configure-hadoop,-e,fs.s3.consistent=true,-e, fs.s3.consistent.metadata.tableName=EmrFSMetadata, -e, fs.s3.consistent.retryCount=5, -e, fs.s3.consistent.retryPeriodSeconds=10, -e, fs.s3.enableServerSideEncryption=true",
       "actionOnTaskFailure": "continue"
     },
