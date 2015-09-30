@@ -39,4 +39,9 @@ public class UserAggregatedSkills {
         this.handleLower = handle.toLowerCase();
         this.skills = skills;
     }
+
+    public UserAggregatedSkills(long userId, String skills) {
+        this.userId = userId;
+        this.skills = skills;
+    }
 }

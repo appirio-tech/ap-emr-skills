@@ -6,5 +6,6 @@ package com.appirio.mapreduce.skills.pojo;
 public enum SkillSource {
 
     USER_ENTERED,
-    CHALLENGE
+    CHALLENGE,
+    EXTERNAL_STACKOVERFLOW
 }

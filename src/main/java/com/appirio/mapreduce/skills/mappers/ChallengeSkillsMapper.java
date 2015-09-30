@@ -40,7 +40,7 @@ public class ChallengeSkillsMapper extends Mapper<LongWritable, Text, Text, Text
         // 152342,kyky,7437797,Java
         String[] inText = value.toString().split(",");
 
-        String outKeyStr = inText[0] + ":" + inText[1];
+        String outKeyStr = String.valueOf(inText[0]);
         Text outKey = new Text(outKeyStr);
 
         MappedSkill mSkill = new MappedSkill();

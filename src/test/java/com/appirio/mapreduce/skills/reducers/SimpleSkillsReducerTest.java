@@ -33,7 +33,7 @@ public class SimpleSkillsReducerTest {
     public void testReducer() throws IOException{
 
         List<Text> values = new ArrayList<Text>();
-        final Text inKey = new Text("1:albertwang");
+        final Text inKey = new Text("1");
         ObjectMapper objMapper = new ObjectMapper();
 
         MappedSkill skill = new MappedSkill();
@@ -64,7 +64,6 @@ public class SimpleSkillsReducerTest {
 
         UserAggregatedSkills userSkills = new UserAggregatedSkills();
         userSkills.setSkills(objMapper.writeValueAsString(skillsMap));
-        userSkills.setUserHandle("albertwang");
         userSkills.setUserId(1L);
 
         reduceDriver.withOutput(new Pair<Text, NullWritable>(

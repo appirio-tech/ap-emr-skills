@@ -1,0 +1,27 @@
+# Options file for Sqoop import
+#
+
+# Specifies the tool being invoked
+import
+
+# Driver
+--driver
+com.informix.jdbc.IfxDriver
+
+--verbose
+
+## Query
+--query
+'SELECT project_result.user_id userId, coder.handle handle, project_result.project_id challengeId, project_technology.name FROM tcs_dw:project_result INNER JOIN tcs_dw:project as project ON project.project_id = project_result.project_id INNER JOIN topcoder_dw:coder as coder ON project_result.user_id = coder.coder_id INNER JOIN tcs_dw:project_technology ON project_technology.project_id = project.project_id WHERE project_result.passed_review_ind = 1 AND $CONDITIONS'
+
+## Boundary query
+--boundary-query
+'select min(coder.coder_id), max(coder.coder_id) from topcoder_dw:coder as coder'
+
+## target directory
+--target-dir
+hdfs:///user/supply/skills/input/challenge
+
+## split by
+--split-by
+project_result.project_id

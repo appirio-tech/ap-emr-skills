@@ -69,15 +69,11 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
             SkillTuple tup = entry.getValue();
             aggregatedSkills.put(entry.getKey(), new AggregatedSkill(tup.weight, tup.sources, tup.hidden));
         }
-
-        // tokenize key - userId:userHandle
-        String inKey[] = key.toString().split(":", 2);
-        // Fixme: handle this in a better way?
-        assert(inKey.length == 2);
+        
+        String userId = key.toString();
 
         UserAggregatedSkills userAgrSkills = new UserAggregatedSkills(
-                new Long(inKey[0]),
-                inKey[1],
+                new Long(userId),
                 mapper.writeValueAsString(aggregatedSkills)
         );
         String output = mapper.writeValueAsString(userAgrSkills);

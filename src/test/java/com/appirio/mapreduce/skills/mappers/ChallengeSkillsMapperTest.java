@@ -95,10 +95,10 @@ public class ChallengeSkillsMapperTest {
         List<Pair<Text, Text>> output = new ArrayList<Pair<Text, Text>>();
 
         ObjectMapper objMapper = new ObjectMapper();
-        output.add(new Pair<Text, Text>(new Text("111:albertwang"), new Text(objMapper.writeValueAsString(skill1))));
-        output.add(new Pair<Text, Text>(new Text("111:albertwang"), new Text(objMapper.writeValueAsString(skill2))));
-        output.add(new Pair<Text, Text>(new Text("111:albertwang"), new Text(objMapper.writeValueAsString(skill3))));
-        output.add(new Pair<Text, Text>(new Text("222:Ghostar"), new Text(objMapper.writeValueAsString(skill4))));
+        output.add(new Pair<Text, Text>(new Text("111"), new Text(objMapper.writeValueAsString(skill1))));
+        output.add(new Pair<Text, Text>(new Text("111"), new Text(objMapper.writeValueAsString(skill2))));
+        output.add(new Pair<Text, Text>(new Text("111"), new Text(objMapper.writeValueAsString(skill3))));
+        output.add(new Pair<Text, Text>(new Text("222"), new Text(objMapper.writeValueAsString(skill4))));
         mapDriver.withAllOutput(output);
 
         mapDriver.runTest();
