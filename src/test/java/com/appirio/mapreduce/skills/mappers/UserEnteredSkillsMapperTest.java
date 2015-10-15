@@ -33,7 +33,7 @@ public class UserEnteredSkillsMapperTest {
     @Test
     public void testMapper() throws IOException{
         mapDriver.withInput(new LongWritable(), new Text(
-                "{\"skills\":\"{ \\\"1\\\": {\\\"createdAt\\\": 1092834894000, \\\"hidden\\\": false,\\\"updatedAt\\\": 1092834894000}, \\\"2\\\": {\\\"createdAt\\\": 1092834894000, \\\"hidden\\\": false,\\\"updatedAt\\\": 1092834894000}}\",\"userhandle\":\"albertwang\",\"userid\":1}"));
+                "{\"skills\":\"{ \\\"1\\\": {\\\"createdAt\\\": 1092834894000, \\\"hidden\\\": false,\\\"updatedAt\\\": 1092834894000}, \\\"2\\\": {\\\"createdAt\\\": 1092834894000, \\\"hidden\\\": false,\\\"updatedAt\\\": 1092834894000}}\",\"userid\":1}"));
 
         MappedSkill skill1 = new MappedSkill();
         skill1.setHidden(false);

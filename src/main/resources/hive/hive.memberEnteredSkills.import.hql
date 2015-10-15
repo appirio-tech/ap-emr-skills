@@ -11,15 +11,14 @@ CREATE TEMPORARY FUNCTION to_json AS 'brickhouse.udf.json.ToJsonUDF';
 DROP TABLE db_user_skills;
 CREATE EXTERNAL TABLE db_user_skills
 (
-  userId BIGINT, 
-  userHandle STRING, 
+  userId BIGINT,
   skills STRING
 )
 STORED BY 'org.apache.hadoop.hive.dynamodb.DynamoDBStorageHandler'
 TBLPROPERTIES 
 (
   "dynamodb.table.name" = "MemberEnteredSkills",
-  "dynamodb.column.mapping" = "userHandle:userHandle,userId:userId,skills:skills"
+  "dynamodb.column.mapping" = "userId:userId,skills:skills"
 );
 
 
@@ -27,8 +26,7 @@ TBLPROPERTIES
 INSERT OVERWRITE DIRECTORY 'hdfs:///user/supply/skills/input/userEntered'
 SELECT to_json(
   named_struct(
-    "userId", userId, 
-    "userHandle", userHandle, 
+    "userId", userId,
     "skills", skills
   )
 ) FROM db_user_skills;

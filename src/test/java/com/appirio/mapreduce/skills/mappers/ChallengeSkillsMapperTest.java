@@ -59,10 +59,10 @@ public class ChallengeSkillsMapperTest {
     public void testMapper() throws IOException{
 
         List<Pair<LongWritable, Text>> input = new ArrayList<Pair<LongWritable, Text>>();
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,albertwang,1111,Java")));
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,albertwang,3333,Javascript")));
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,albertwang,2423,Javascript")));
-        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("222,Ghostar,2222,Java")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,1111,Java")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,3333,Javascript")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,2423,Javascript")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("222,2222,Java")));
 
         mapDriver.withAll(input);
 

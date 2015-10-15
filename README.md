@@ -24,7 +24,7 @@ aws emr create-cluster --name “SkillsTest3” --enable-debugging --log-uri s3:
 
 #### Test
 ```
-hadoop jar target/ap-emr-skills-1.0-SNAPSHOT.jar com.appirio.mapreduce.skills.SkillsAggregator src/test/resources/skills/input/userEnteredSkills.txt src/test/resources/skills/input/challengeSkills.txt /tmp/skills
+hadoop jar target/ap-emr-skills-1.0-SNAPSHOT.jar com.appirio.mapreduce.skills.SkillsAggregator src/test/resources/skills/input/userEnteredSkills.txt src/test/resources/skills/input/challengeSkills.txt src/test/resources/skills/input/stackOverflowSkills.txt /tmp/skills
 ```
 
 
