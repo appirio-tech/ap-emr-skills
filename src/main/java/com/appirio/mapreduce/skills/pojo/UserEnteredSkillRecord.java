@@ -15,12 +15,7 @@ public class UserEnteredSkillRecord {
     @Getter
     @Setter
     private long userId;
-
-    @JsonProperty("userhandle")
-    @Getter
-    @Setter
-    private String userHandle;
-
+    
     @JsonBackReference("skills")
     @Getter
     @Setter

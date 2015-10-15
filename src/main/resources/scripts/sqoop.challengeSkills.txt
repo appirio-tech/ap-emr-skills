@@ -12,7 +12,7 @@ com.informix.jdbc.IfxDriver
 
 ## Query
 --query
-'SELECT project_result.user_id userId, coder.handle handle, project_result.project_id challengeId, project_technology.name FROM tcs_dw:project_result INNER JOIN tcs_dw:project as project ON project.project_id = project_result.project_id INNER JOIN topcoder_dw:coder as coder ON project_result.user_id = coder.coder_id INNER JOIN tcs_dw:project_technology ON project_technology.project_id = project.project_id WHERE project_result.passed_review_ind = 1 AND $CONDITIONS'
+'SELECT * FROM (SELECT ps.coder_id as userId, "srm" || ps.round_id as challengeId, ll.language_name as name FROM topcoder_dw:problem_submission ps INNER JOIN topcoder_dw:language_lu ll ON ll.language_id = ps.language_id AND ll.language_name != 'Unspecified' UNION ALL SELECT ps.coder_id as userId, "srm" || ps.round_id as challengeId, pclu.problem_category_desc as name FROM topcoder_dw:problem_submission ps INNER JOIN topcoder_dw:problem_category_xref pcxref ON pcxref.problem_id = ps.problem_id INNER JOIN topcoder_dw:problem_category_lu pclu ON pclu.problem_category_id = pcxref.problem_category_id UNION ALL SELECT lps.coder_id as userId, "mm" || lps.round_id as challengeId, ll.language_name as name FROM topcoder_dw:long_problem_submission lps INNER JOIN topcoder_dw:language_lu ll ON ll.language_id = lps.language_id AND ll.language_name != 'Unspecified' UNION ALL SELECT lps.coder_id as userId, "mm" || lps.round_id as challengeId, pclu.problem_category_desc as name FROM topcoder_dw:long_problem_submission lps INNER JOIN topcoder_dw:problem_category_xref pcxref ON pcxref.problem_id = lps.problem_id INNER JOIN topcoder_dw:problem_category_lu pclu ON pclu.problem_category_id = pcxref.problem_category_id UNION ALL SELECT pr.user_id as userId, "ss" || pr.project_id as challengeId, pt.name as name FROM tcs_dw:project_result pr INNER JOIN tcs_dw:project p ON p.project_id = pr.project_id INNER JOIN tcs_dw:project_technology pt ON pt.project_id = p.project_id WHERE pr.passed_review_ind = 1) WHERE $CONDITIONS'
 
 ## Boundary query
 --boundary-query
@@ -24,4 +24,4 @@ hdfs:///user/supply/skills/input/challenge
 
 ## split by
 --split-by
-project_result.project_id
+userId
