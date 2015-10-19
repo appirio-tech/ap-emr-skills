@@ -15,10 +15,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class StackOverflowSkillsMapper extends Mapper<LongWritable, Text, Text, Text> {
@@ -48,22 +45,27 @@ public class StackOverflowSkillsMapper extends Mapper<LongWritable, Text, Text, 
 
         log.error("UserId : "+skillRec.getUserId());
         String topTags = skillRec.getTopTags();
-        List<String> tagsList = Arrays.asList(topTags.split(","));
+        List<String> tagsList = new ArrayList<String>();
+        if (topTags != null && !topTags.equals("")) {
+            tagsList = Arrays.asList(topTags.split(","));
 
-        log.error("Number of Tags: " + tagsList.size());
-        for (String tag: tagsList) {
-            Long tagId = tagHelper.getTagId(tag);
-            if (tagId != null) {
-                MappedSkill skill = new MappedSkill();
-                skill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.EXTERNAL_STACKOVERFLOW)));
-                skill.setTagId(tagId);
-                skill.setWeight(defaultStackOverflowSkillWeight);
+            log.error("Number of Tags: " + tagsList.size());
+            for (String tag : tagsList) {
+                Long tagId = tagHelper.getTagId(tag);
+                if (tagId != null) {
+                    MappedSkill skill = new MappedSkill();
+                    skill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.EXTERNAL_STACKOVERFLOW)));
+                    skill.setTagId(tagId);
+                    skill.setWeight(defaultStackOverflowSkillWeight);
 
-                Text val = new Text(mapper.writeValueAsBytes(skill));
-                context.write(outKey, val);
-            } else {
-                log.error("[StackOverflow] Unable to retrieve TagId for '"+tag.toString()+"'. Skipping");
+                    Text val = new Text(mapper.writeValueAsBytes(skill));
+                    context.write(outKey, val);
+                } else {
+                    log.error("[StackOverflow] Unable to retrieve TagId for '" + tag.toString() + "'. Skipping");
+                }
             }
+        } else {
+            log.error("[StackOverflow] No Tags found for User:"+skillRec.getUserId());
         }
     }
 

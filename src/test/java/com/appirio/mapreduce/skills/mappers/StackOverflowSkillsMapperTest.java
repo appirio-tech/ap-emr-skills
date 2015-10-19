@@ -86,4 +86,19 @@ public class StackOverflowSkillsMapperTest {
         mapDriver.runTest();
         PowerMockito.verifyStatic(Mockito.times(1));
     }
+
+    @Test
+    public void testMapperEmptyTags() throws IOException {
+        List<Pair<LongWritable, Text>> input = new ArrayList<Pair<LongWritable, Text>>();
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("{\"userid\":111, \"toptags\":\"\"}")));
+
+        mapDriver.withAll(input);
+
+        // no output expected
+        List<Pair<Text, Text>> output = new ArrayList<Pair<Text, Text>>();
+        mapDriver.withAllOutput(output);
+
+        mapDriver.runTest();
+        PowerMockito.verifyStatic(Mockito.times(1));
+    }
 }
