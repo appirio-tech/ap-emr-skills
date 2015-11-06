@@ -37,24 +37,30 @@ public class ChallengeSkillsMapper extends Mapper<LongWritable, Text, Text, Text
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
 
-        // 152342,kyky,7437797,Java
+        // 152342,7437797,Java
         String[] inText = value.toString().split(",");
-
-        String outKeyStr = String.valueOf(inText[0]);
-        Text outKey = new Text(outKeyStr);
-
-        MappedSkill mSkill = new MappedSkill();
-        mSkill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
-        mSkill.setHidden(false);
-        Long tagId = tagHelper.getTagId(inText[2]);
-        if (tagId != null) {
-            mSkill.setTagId(tagId);
-            mSkill.setWeight(1);
-
-            Text val = new Text(mapper.writeValueAsBytes(mSkill));
-            context.write(outKey, val);
+        if (inText == null || inText.length != 3) {
+            String msg = "Bad Input for key:'" + key.toString() + "' '" + value.toString() +"'. Skipping";
+            System.out.println(msg);
+            log.error("Bad Input for key:'" + key.toString() + "' '" + value.toString() +"'. Skipping");
         } else {
-            log.error("Unable to retrieve TagId for '"+inText[2]+"'. Skipping");
+
+            String outKeyStr = String.valueOf(inText[0]);
+            Text outKey = new Text(outKeyStr);
+
+            MappedSkill mSkill = new MappedSkill();
+            mSkill.setSources(new HashSet<SkillSource>(Arrays.asList(SkillSource.CHALLENGE)));
+            mSkill.setHidden(false);
+            Long tagId = tagHelper.getTagId(inText[2]);
+            if (tagId != null) {
+                mSkill.setTagId(tagId);
+                mSkill.setWeight(1);
+
+                Text val = new Text(mapper.writeValueAsBytes(mSkill));
+                context.write(outKey, val);
+            } else {
+                log.error("Unable to retrieve TagId for '"+inText[2]+"'. Skipping");
+            }
         }
     }
 }

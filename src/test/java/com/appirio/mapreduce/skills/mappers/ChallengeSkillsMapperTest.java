@@ -59,6 +59,9 @@ public class ChallengeSkillsMapperTest {
     public void testMapper() throws IOException{
 
         List<Pair<LongWritable, Text>> input = new ArrayList<Pair<LongWritable, Text>>();
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,1111,")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,1111")));
+        input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("")));
         input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,1111,Java")));
         input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,3333,Javascript")));
         input.add(new Pair<LongWritable, Text>(new LongWritable(), new Text("111,2423,Javascript")));
