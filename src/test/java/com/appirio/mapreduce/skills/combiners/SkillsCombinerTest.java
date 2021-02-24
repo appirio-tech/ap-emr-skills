@@ -1,12 +1,8 @@
 package com.appirio.mapreduce.skills.combiners;
 
-import com.appirio.mapreduce.skills.pojo.AggregatedSkill;
 import com.appirio.mapreduce.skills.pojo.MappedSkill;
 import com.appirio.mapreduce.skills.pojo.SkillSource;
-import com.appirio.mapreduce.skills.pojo.UserAggregatedSkills;
-import com.appirio.mapreduce.skills.reducers.SimpleSkillsReducer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;

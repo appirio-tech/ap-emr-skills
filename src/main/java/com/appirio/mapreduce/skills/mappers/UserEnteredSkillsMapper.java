@@ -35,7 +35,6 @@ public class UserEnteredSkillsMapper extends Mapper<LongWritable, Text, Text, Te
 
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
         // convert to pojo
         UserEnteredSkillRecord skillRec = mapper.readValue(value.getBytes(), UserEnteredSkillRecord.class);
 

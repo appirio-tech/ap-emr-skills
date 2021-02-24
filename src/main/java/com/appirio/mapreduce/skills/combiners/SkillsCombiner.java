@@ -5,7 +5,6 @@ import com.appirio.mapreduce.skills.pojo.SkillSource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
@@ -34,14 +33,13 @@ public class SkillsCombiner extends Reducer<Text, Text, Text, Text> {
 
     @Override
     protected void reduce(Text key, Iterable<Text> skills, Context context)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
         Iterator<Text> itr = skills.iterator();
         HashMap<Long, SkillTuple> skillMap = new HashMap<Long, SkillTuple>();
 
         while(itr.hasNext()) {
 
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
-//            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
             long tagId = skill.getTagId();
             SkillTuple tup;
             if (skillMap.containsKey(tagId)) {
