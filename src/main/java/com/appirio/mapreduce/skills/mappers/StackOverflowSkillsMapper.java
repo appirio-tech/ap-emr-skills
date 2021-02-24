@@ -35,7 +35,6 @@ public class StackOverflowSkillsMapper extends Mapper<LongWritable, Text, Text, 
 
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
-
         // convert to pojo
         StackOverflowSkillRecord skillRec = mapper.readValue(value.getBytes(), StackOverflowSkillRecord.class);
 

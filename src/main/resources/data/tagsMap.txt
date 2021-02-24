@@ -145,7 +145,7 @@
 244|J2EE|
 245|J2ME|
 246|Jabber|
-247|Java|
+247|Java|["Java Application"]
 248|JavaScript|
 249|JBoss Seam|
 250|JDBC|
@@ -254,7 +254,7 @@
 353|Sorting|
 354|Spring|
 355|SQL|
-356|SQL Server|["Sql-Server", "SQL Server 2000"]
+356|SQL Server|["Sql-Server", "SQL Server 2000", "SQL Server 2008"]
 357|Sqlite|
 358|SSIS|
 359|String|

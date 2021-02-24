@@ -19,7 +19,6 @@ import java.util.*;
  */
 public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable> {
 
-
     private class SkillTuple {
         private  Set<SkillSource> sources;
         private double weight;
@@ -32,18 +31,15 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
         log = LogFactory.getLog(this.getClass());
     }
 
-
-
     @Override
     protected void reduce(Text key, Iterable<Text> skills, Context context)
-        throws IOException, InterruptedException {
+            throws IOException, InterruptedException {
         Iterator<Text> itr = skills.iterator();
         HashMap<Long, SkillTuple> skillMap = new HashMap<Long, SkillTuple>();
 
         while(itr.hasNext()) {
 
             MappedSkill skill = mapper.readValue(itr.next().getBytes(), MappedSkill.class);
-//            skillMap.compute(skill.getTagId(), (k,v) -> v == null ? skill.getWeight(): skill.getWeight()+v);
             long tagId = skill.getTagId();
             SkillTuple tup;
             if (skillMap.containsKey(tagId)) {
@@ -64,12 +60,11 @@ public class SimpleSkillsReducer extends Reducer<Text, Text, Text, NullWritable>
 
         // Create output object
         Map<Long, AggregatedSkill> aggregatedSkills = new HashMap<Long, AggregatedSkill>();
-//        skillMap.forEach((k,v) -> aggregatedSkills.add(new AggregatedSkill(k,v)));
         for (Map.Entry<Long, SkillTuple> entry: skillMap.entrySet()) {
             SkillTuple tup = entry.getValue();
             aggregatedSkills.put(entry.getKey(), new AggregatedSkill(tup.weight, tup.sources, tup.hidden));
         }
-        
+
         String userId = key.toString();
 
         UserAggregatedSkills userAgrSkills = new UserAggregatedSkills(
